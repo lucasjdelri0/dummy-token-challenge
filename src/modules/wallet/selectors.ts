@@ -1,7 +1,8 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { RootState } from "../types";
 
 export const getState = (state: RootState) => state.wallet;
+export const getProvider = (state: RootState) => getState(state).provider;
 export const getAddress = (state: RootState) => getState(state).address || "";
 export const getSymbol = (state: RootState) => getState(state).symbol || "";
 export const getBalance = (state: RootState) =>

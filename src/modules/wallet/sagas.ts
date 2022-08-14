@@ -42,7 +42,7 @@ function* handleConnectWalletRequest() {
     const balance: BigNumber = yield call(
       async () => await token.balanceOf(address)
     );
-    yield put(connectWalletSuccess(address, symbol, balance));
+    yield put(connectWalletSuccess(provider, address, symbol, balance));
   } catch (error: any) {
     yield put(connectWalletFailure(error.message));
   }

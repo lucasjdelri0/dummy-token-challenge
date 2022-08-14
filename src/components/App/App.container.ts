@@ -1,6 +1,7 @@
 import { connect } from "react-redux";
 import { connectWalletRequest } from "../../modules/wallet/actions";
 import {
+  getProvider,
   getAddress,
   getSymbol,
   getBalance,
@@ -13,6 +14,7 @@ import { MapDispatch, MapDispatchProps, MapStateProps } from "./App.types";
 import App from "./App";
 
 const mapState = (state: RootState): MapStateProps => ({
+  provider: getProvider(state),
   address: getAddress(state),
   symbol: getSymbol(state),
   balance: getBalance(state),

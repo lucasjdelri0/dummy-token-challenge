@@ -2,17 +2,28 @@ import { Button, Close, Field, Modal } from "decentraland-ui";
 import { useState } from "react";
 import { Props } from "./TransferModal.types";
 
-const TransferModal: React.FC<Props> = ({ showModal, onClose }) => {
+const TransferModal: React.FC<Props> = ({
+  showModal = false,
+  onClose,
+  onSubmit,
+  onSuccess,
+}) => {
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const transferTokens = () => {
+  const transferTokens = async () => {
+    if (!onSubmit) {
+      return;
+    }
     setIsLoading(true);
-    setTimeout(() => {
-      console.log(`About to send ${amount} tokens to ${address}`);
-      setIsLoading(false);
-    }, 3000);
+    try {
+      await onSubmit(address, amount);
+      onSuccess();
+    } catch (e) {
+      console.error(e);
+    }
+    setIsLoading(false);
   };
 
   return (

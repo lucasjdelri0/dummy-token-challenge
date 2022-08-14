@@ -1,4 +1,4 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 // Connect Wallet
 export const CONNECT_WALLET_REQUEST = "[Request] Connect Wallet";
@@ -13,6 +13,7 @@ export function connectWalletRequest() {
 }
 
 export function connectWalletSuccess(
+  provider: ethers.providers.Web3Provider,
   address: string,
   symbol: string,
   balance: BigNumber
@@ -20,6 +21,7 @@ export function connectWalletSuccess(
   return {
     type: CONNECT_WALLET_SUCCESS,
     payload: {
+      provider,
       address,
       symbol,
       balance,

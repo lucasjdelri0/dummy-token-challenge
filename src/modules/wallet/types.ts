@@ -1,6 +1,7 @@
 import { BigNumber, ethers } from "ethers";
 
 export type WalletState = {
+  provider: ethers.providers.Web3Provider | null;
   address: string | null;
   symbol: string | null;
   balance: BigNumber | null;

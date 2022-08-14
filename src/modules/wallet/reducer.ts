@@ -9,6 +9,7 @@ import {
 import { WalletState } from "./types";
 
 const INITIAL_STATE: WalletState = {
+  provider: null,
   address: null,
   symbol: null,
   balance: null,
@@ -29,11 +30,12 @@ export function walletReducer(
       };
     }
     case CONNECT_WALLET_SUCCESS: {
-      const { address, symbol, balance } =
+      const { provider, address, symbol, balance } =
         action.payload as ConnectWalletSuccessAction["payload"];
       return {
         ...state,
         isConnecting: false,
+        provider,
         address,
         symbol,
         balance,
