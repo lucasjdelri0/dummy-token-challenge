@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
@@ -8,6 +8,7 @@ import {
   Navbar,
   Page,
 } from "decentraland-ui";
+import { TransferModal } from "../modals/TransferModal";
 import { Props } from "./App.types";
 import "./App.css";
 
@@ -20,6 +21,7 @@ const App: React.FC<Props> = ({
   isConnecting,
   error,
 }) => {
+  const [showModal, setShowModal] = useState(false);
   const strBalance = balance.toString();
   const walletBalance = `${strBalance} ${symbol}`;
 
@@ -36,16 +38,25 @@ const App: React.FC<Props> = ({
               {error ? <p className="error">{error}</p> : null}
             </>
           ) : (
-            <Card>
-              <Header>Wallet</Header>
-              <p>
-                <strong>Address:</strong>&nbsp;
-                {address.slice(0, 6) + "..." + address.slice(-4)}
-              </p>
-              <p>
-                <strong>Balance:</strong>&nbsp; {walletBalance}
-              </p>
-            </Card>
+            <>
+              <Card>
+                <Header>Wallet</Header>
+                <p>
+                  <strong>Address:</strong>&nbsp;
+                  {address.slice(0, 6) + "..." + address.slice(-4)}
+                </p>
+                <p>
+                  <strong>Balance:</strong>&nbsp; {walletBalance}
+                  <Button basic onClick={() => setShowModal(!showModal)}>
+                    Transfer
+                  </Button>
+                </p>
+              </Card>
+              <TransferModal
+                showModal={showModal}
+                onClose={() => setShowModal(!showModal)}
+              />
+            </>
           )}
         </Center>
       </Page>
