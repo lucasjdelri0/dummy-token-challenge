@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Button,
   Card,
@@ -7,17 +7,22 @@ import {
   Header,
   Navbar,
   Page,
-} from 'decentraland-ui'
-import { Props } from './App.types'
-import './App.css'
+} from "decentraland-ui";
+import { Props } from "./App.types";
+import "./App.css";
 
 const App: React.FC<Props> = ({
   address,
+  symbol,
+  balance,
   isConnected,
   onConnect,
   isConnecting,
   error,
 }) => {
+  const strBalance = balance.toString();
+  const walletBalance = `${strBalance} ${symbol}`;
+
   return (
     <>
       <Navbar />
@@ -35,7 +40,10 @@ const App: React.FC<Props> = ({
               <Header>Wallet</Header>
               <p>
                 <strong>Address:</strong>&nbsp;
-                {address.slice(0, 6) + '...' + address.slice(-4)}
+                {address.slice(0, 6) + "..." + address.slice(-4)}
+              </p>
+              <p>
+                <strong>Balance:</strong>&nbsp; {walletBalance}
               </p>
             </Card>
           )}
@@ -43,7 +51,7 @@ const App: React.FC<Props> = ({
       </Page>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

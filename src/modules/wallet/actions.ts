@@ -1,22 +1,30 @@
+import { BigNumber } from "ethers";
+
 // Connect Wallet
-export const CONNECT_WALLET_REQUEST = '[Request] Connect Wallet'
-export const CONNECT_WALLET_SUCCESS = '[Success] Connect Wallet'
-export const CONNECT_WALLET_FAILURE = '[Failure] Connect Wallet'
+export const CONNECT_WALLET_REQUEST = "[Request] Connect Wallet";
+export const CONNECT_WALLET_SUCCESS = "[Success] Connect Wallet";
+export const CONNECT_WALLET_FAILURE = "[Failure] Connect Wallet";
 
 export function connectWalletRequest() {
   return {
     type: CONNECT_WALLET_REQUEST,
     payload: {},
-  }
+  };
 }
 
-export function connectWalletSuccess(address: string) {
+export function connectWalletSuccess(
+  address: string,
+  symbol: string,
+  balance: BigNumber
+) {
   return {
     type: CONNECT_WALLET_SUCCESS,
     payload: {
       address,
+      symbol,
+      balance,
     },
-  }
+  };
 }
 
 export function connectWalletFailure(error: string) {
@@ -25,9 +33,15 @@ export function connectWalletFailure(error: string) {
     payload: {
       error,
     },
-  }
+  };
 }
 
-export type ConnectWalletRequestAction = ReturnType<typeof connectWalletRequest>
-export type ConnectWalletSuccessAction = ReturnType<typeof connectWalletSuccess>
-export type ConnectWalletFailureAction = ReturnType<typeof connectWalletFailure>
+export type ConnectWalletRequestAction = ReturnType<
+  typeof connectWalletRequest
+>;
+export type ConnectWalletSuccessAction = ReturnType<
+  typeof connectWalletSuccess
+>;
+export type ConnectWalletFailureAction = ReturnType<
+  typeof connectWalletFailure
+>;
