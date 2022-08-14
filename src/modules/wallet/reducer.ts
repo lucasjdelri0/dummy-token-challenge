@@ -5,6 +5,8 @@ import {
   CONNECT_WALLET_FAILURE,
   CONNECT_WALLET_REQUEST,
   CONNECT_WALLET_SUCCESS,
+  UpdateBalanceAction,
+  UPDATE_BALANCE,
 } from "./actions";
 import { WalletState } from "./types";
 
@@ -42,13 +44,19 @@ export function walletReducer(
         error: null,
       };
     }
-
     case CONNECT_WALLET_FAILURE: {
       const { error } = action.payload as ConnectWalletFailureAction["payload"];
       return {
         ...state,
         isConnecting: false,
         error,
+      };
+    }
+    case UPDATE_BALANCE: {
+      const { balance } = action.payload as UpdateBalanceAction["payload"];
+      return {
+        ...state,
+        balance,
       };
     }
 

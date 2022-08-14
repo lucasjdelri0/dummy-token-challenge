@@ -1,9 +1,11 @@
 import { BigNumber, ethers } from "ethers";
-import { call, put, takeEvery } from "redux-saga/effects";
+import { all, call, put, takeEvery } from "redux-saga/effects";
 import {
   connectWalletFailure,
   connectWalletSuccess,
+  updateBalance,
   CONNECT_WALLET_REQUEST,
+  UPDATE_BALANCE,
 } from "./actions";
 import { WindowWithEthereum } from "./types";
 
@@ -29,10 +31,22 @@ export const TOKEN_ABI = [
 const provider = new ethers.providers.Web3Provider(ethereum);
 const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, provider);
 
-export function* walletSaga() {
-  yield takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest);
+// Balance worker Saga: will perform the async increment task
+export function* handleUpdateBalance() {
+  const signer = provider.getSigner();
+  const address: string = yield call(() => signer.getAddress());
+  const balance: BigNumber = yield call(
+    async () => await token.balanceOf(address)
+  );
+  console.log(`updatedBalance`, balance.toString());
+  yield put(updateBalance(balance));
 }
 
+function* balanceSaga() {
+  yield takeEvery(UPDATE_BALANCE, handleUpdateBalance);
+}
+
+// Wallet worker Saga: will perform the async increment task
 function* handleConnectWalletRequest() {
   try {
     yield call(() => provider.send("eth_requestAccounts", []));
@@ -46,4 +60,15 @@ function* handleConnectWalletRequest() {
   } catch (error: any) {
     yield put(connectWalletFailure(error.message));
   }
+}
+
+// Wallet watcher Saga: spawn a new handleConnectWalletRequest task on each CONNECT_WALLET_REQUEST
+function* walletSaga() {
+  yield takeEvery(CONNECT_WALLET_REQUEST, handleConnectWalletRequest);
+}
+
+// notice how we now only export the rootSaga
+// single entry point to start all Sagas at once
+export function* rootSaga() {
+  yield all([walletSaga(), balanceSaga()]);
 }

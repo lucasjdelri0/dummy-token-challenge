@@ -4,6 +4,7 @@ import { BigNumber, ethers } from "ethers";
 export const CONNECT_WALLET_REQUEST = "[Request] Connect Wallet";
 export const CONNECT_WALLET_SUCCESS = "[Success] Connect Wallet";
 export const CONNECT_WALLET_FAILURE = "[Failure] Connect Wallet";
+export const UPDATE_BALANCE = "Dummy Token balance is updated";
 
 export function connectWalletRequest() {
   return {
@@ -38,6 +39,16 @@ export function connectWalletFailure(error: string) {
   };
 }
 
+export function updateBalance(balance: BigNumber) {
+  return {
+    type: UPDATE_BALANCE,
+    // payload: {},
+    payload: {
+      balance,
+    },
+  };
+}
+
 export type ConnectWalletRequestAction = ReturnType<
   typeof connectWalletRequest
 >;
@@ -47,3 +58,4 @@ export type ConnectWalletSuccessAction = ReturnType<
 export type ConnectWalletFailureAction = ReturnType<
   typeof connectWalletFailure
 >;
+export type UpdateBalanceAction = ReturnType<typeof updateBalance>;

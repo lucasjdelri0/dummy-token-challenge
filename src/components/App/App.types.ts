@@ -1,6 +1,9 @@
 import { BigNumber, ethers } from "ethers";
 import { AnyAction, Dispatch } from "redux";
-import { ConnectWalletRequestAction } from "../../modules/wallet/actions";
+import {
+  ConnectWalletRequestAction,
+  UpdateBalanceAction,
+} from "../../modules/wallet/actions";
 
 export type Props = {
   provider: ethers.providers.Web3Provider | null;
@@ -25,3 +28,4 @@ export type MapStateProps = Pick<
 >;
 export type MapDispatchProps = Pick<Props, "onConnect">;
 export type MapDispatch = Dispatch<ConnectWalletRequestAction | AnyAction>;
+export type BalanceDispatch = Dispatch<UpdateBalanceAction | AnyAction>;
