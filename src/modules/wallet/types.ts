@@ -1,11 +1,14 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from "ethers";
 
 export type WalletState = {
-  address: string | null
-  isConnecting: boolean
-  error: string | null
-}
+  provider: ethers.providers.Web3Provider | null;
+  address: string | null;
+  symbol: string | null;
+  balance: BigNumber | null;
+  isConnecting: boolean;
+  error: string | null;
+};
 
 export type WindowWithEthereum = Window & {
-  ethereum: ethers.providers.ExternalProvider
-}
+  ethereum: ethers.providers.ExternalProvider;
+};
