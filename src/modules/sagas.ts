@@ -1,6 +1,6 @@
 import { all } from "@redux-saga/core/effects";
-import { rootSaga } from "./wallet/sagas";
+import { walletSaga } from "./wallet/sagas";
 
 export function* sagas() {
-  yield all([rootSaga()]);
+  yield all([walletSaga()]);
 }

@@ -39,22 +39,20 @@ const App: React.FC<Props> = ({
   const signer = provider?.getSigner();
   const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
 
-  const handleSubmit = async (address: string, amount: string) => {
+  const handleSubmit = async (recipient: string, amount: string) => {
     if (!token) return;
     try {
-      await token.transfer(address, ethers.utils.parseUnits(amount, 0));
-      // await token.transfer(address, BigNumber.from(amount));
+      const tx = await token.transfer(
+        recipient,
+        ethers.utils.parseUnits(amount, 0)
+      );
+      await tx.wait();
+      const balance: BigNumber = await token.balanceOf(address);
+      dispatch({ type: UPDATE_BALANCE, payload: { balance } });
+      setShowModal(false);
     } catch (e) {
       console.error(e);
     }
-  };
-
-  const handleSuccess = async () => {
-    setShowModal(false);
-    // const balance: BigNumber = await token.balanceOf(signer?.getAddress());
-    // console.log(`updatedBalance`, balance.toString());
-
-    dispatch({ type: UPDATE_BALANCE, payload: {} });
   };
 
   return (
@@ -87,8 +85,7 @@ const App: React.FC<Props> = ({
               <TransferModal
                 showModal={showModal}
                 onClose={() => setShowModal(false)}
-                onSubmit={async (addr, amt) => await handleSubmit(addr, amt)}
-                onSuccess={handleSuccess}
+                onSubmit={(addr, amt) => handleSubmit(addr, amt)}
               />
             </>
           )}

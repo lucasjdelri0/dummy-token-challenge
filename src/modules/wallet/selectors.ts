@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 import { RootState } from "../types";
 
 export const getState = (state: RootState) => state.wallet;

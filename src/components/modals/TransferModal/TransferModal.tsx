@@ -6,7 +6,6 @@ const TransferModal: React.FC<Props> = ({
   showModal = false,
   onClose,
   onSubmit,
-  onSuccess,
 }) => {
   const [address, setAddress] = useState("");
   const [amount, setAmount] = useState("");
@@ -19,7 +18,6 @@ const TransferModal: React.FC<Props> = ({
     setIsLoading(true);
     try {
       await onSubmit(address, amount);
-      onSuccess();
     } catch (e) {
       console.error(e);
     }
