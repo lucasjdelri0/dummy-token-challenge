@@ -28,4 +28,3 @@ export type MapStateProps = Pick<
 >;
 export type MapDispatchProps = Pick<Props, "onConnect">;
 export type MapDispatch = Dispatch<ConnectWalletRequestAction | AnyAction>;
-export type BalanceDispatch = Dispatch<UpdateBalanceAction | AnyAction>;

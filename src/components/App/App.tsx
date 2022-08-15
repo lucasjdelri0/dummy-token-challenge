@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { BigNumber } from "ethers";
 import {
   Button,
   Card,
@@ -8,12 +10,11 @@ import {
   Navbar,
   Page,
 } from "decentraland-ui";
+import { getDummyContract } from "../../utils/contractHelpers";
+import { UPDATE_BALANCE } from "../../modules/wallet/actions";
 import { TransferModal } from "../modals/TransferModal";
 import { Props } from "./App.types";
 import "./App.css";
-import { BigNumber, ethers } from "ethers";
-import { UPDATE_BALANCE } from "../../modules/wallet/actions";
-import { useDispatch } from "react-redux";
 
 const App: React.FC<Props> = ({
   provider,
@@ -26,28 +27,19 @@ const App: React.FC<Props> = ({
   error,
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const strBalance = balance.toString();
-  const walletBalance = `${strBalance} ${symbol}`;
   const dispatch = useDispatch();
 
-  const TOKEN_ADDRESS = process.env.REACT_APP_TOKEN_ADDRESS!;
-  const TOKEN_ABI = [
-    "function symbol() view returns (string)",
-    "function balanceOf(address) view returns (uint)",
-    "function transfer(address to, uint amount)",
-  ];
+  const walletBalance = `${balance.toString()} ${symbol}`;
+
   const signer = provider?.getSigner();
-  const token = new ethers.Contract(TOKEN_ADDRESS, TOKEN_ABI, signer);
+  const dummyContract = getDummyContract(signer);
 
   const handleSubmit = async (recipient: string, amount: string) => {
-    if (!token) return;
+    if (!dummyContract) return;
     try {
-      const tx = await token.transfer(
-        recipient,
-        ethers.utils.parseUnits(amount, 0)
-      );
+      const tx = await dummyContract.transfer(recipient, amount);
       await tx.wait();
-      const balance: BigNumber = await token.balanceOf(address);
+      const balance: BigNumber = await dummyContract.balanceOf(address);
       dispatch({ type: UPDATE_BALANCE, payload: { balance } });
       setShowModal(false);
     } catch (e) {
@@ -83,6 +75,8 @@ const App: React.FC<Props> = ({
                 </p>
               </Card>
               <TransferModal
+                dummyBalance={balance.toString()}
+                dummySymbol={symbol}
                 showModal={showModal}
                 onClose={() => setShowModal(false)}
                 onSubmit={(addr, amt) => handleSubmit(addr, amt)}
